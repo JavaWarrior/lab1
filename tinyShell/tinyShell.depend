@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1444351790 source:c:\users\ramadan\google drive\csed3\first term\os\labs\lab1\tinyshell\todo.c
+
+1444416341 source:c:\users\ramadan\google drive\csed3\first term\os\labs\lab1\tinyshell\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<sys/types.h>
+	"err_codes.h"
+
+1444349268 c:\users\ramadan\google drive\csed3\first term\os\labs\lab1\tinyshell\err_codes.h
+
