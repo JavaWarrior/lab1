@@ -4,12 +4,15 @@
 
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 #include "err_codes.h"
 //defines
 #define __CMND_LINE_INPUT_SIZE_MAX 520
 #define __MAX_NUM_PARAMS_SIZE 200
 #define __SHELL "/bin/sh"
+#define __MAX_SHELL_LINE_SIZE 513
+#define __HISTORY_FILE_PATH "/tmp/history.txt"
 // global vars
 typedef struct {
     enum errcodes_type_enum error_code;
@@ -21,11 +24,17 @@ size_t main_input_line_size;
 void terminate(); //terminates the program
 void initialize();
 size_t clearSpaces(char * str,int sz); //clears extra spaces in str
-error input(char * str , size_t* sz , size_t maxSz,FILE * inp_file); //takes input from user of max size maxSz
 void error_msg(error err); //display error messages with error codes in stderr
+void outputFile(char * fileName);
+
 error execute(char *str , size_t sz);
 error executeFore(char *str[] );
 error executeBack(char *str[] );
+
+error executeCD(char *str[]);
+error executeHistory(char *str[]);
+
+error chckdir(char * dir);
 //main
 int main(int argc , char ** argv)
 {
@@ -37,40 +46,34 @@ int main(int argc , char ** argv)
             err_tmp.error_code = __ERR_CODES_INVALID_FILE;
             error_msg(err_tmp);
         }else{
-            while(1){
-                input(main_input_line,&main_input_line_size,512,fp);
+            while(!fgets(main_input_line,__MAX_SHELL_LINE_SIZE,stdin)){
                 printf("shell>");
                 puts(main_input_line);
                 main_input_line_size = clearSpaces(main_input_line,main_input_line_size);
-                if(main_input_line_size == 0){
+                if(main_input_line_size < 2){
                     continue;
                 }
-                if(!strcmp(main_input_line,"exit")){
-                    terminate();
-                    break;
+               err_cd = execute(main_input_line,main_input_line_size);
+               if(err_cd.error_code != __ERR_CODES_SUCCESS){
+                    error_msg(err_cd);
                 }
-                execute(main_input_line,main_input_line_size);
             }
         }
     }else if(argc == 1){
-        puts("----------------- welcome to shell program ---------------------");
+        error err_cd = {__ERR_CODES_SUCCESS};
         while(1){
             printf("shell>");
-            error err_cd = input(main_input_line,&main_input_line_size,512,stdin);
+            fgets(main_input_line,__MAX_SHELL_LINE_SIZE,stdin);
             main_input_line_size = strlen(main_input_line);
-            if(err_cd.error_code != __ERR_CODES_SUCCESS){
-                error_msg(err_cd);
-                continue;
-            }
+            fputs(main_input_line,history_file);
             main_input_line_size = clearSpaces(main_input_line,main_input_line_size);
-            if(main_input_line_size == 0){
+            if(main_input_line_size < 2){
                     continue;
             }
-            if(!strcmp(main_input_line,"exit")){
-                terminate();
-                break;
+            err_cd = execute(main_input_line,main_input_line_size);
+            if(err_cd.error_code != __ERR_CODES_SUCCESS){
+                error_msg(err_cd);
             }
-            execute(main_input_line,main_input_line_size);
         }
     }else{
         //error
@@ -80,32 +83,31 @@ int main(int argc , char ** argv)
 }
 //function implementation
  void initialize(){
-    history_file = fopen("history.txt","a");
+         puts("----------------- welcome to shell program ---------------------");
+    history_file = fopen(__HISTORY_FILE_PATH,"a");
+    if(history_file == NULL){
+        history_file = fopen(__HISTORY_FILE_PATH,"wb");
+        if(history_file == NULL){
+            error err_tmp ={__ERR_CODES_HISTORY_FILE_OPEN};
+            error_msg(err_tmp);
+            terminate();
+        }
+    }
 }
 void terminate(){
     puts("----------------- program exited ---------------------");
+    close(history_file);
+    exit(0);
 }
-error input(char * buff , size_t *sz , size_t maxSz,FILE * inp_file){
-    error err_temp = {__ERR_CODES_FAIL};
-    if(buff == NULL){
-        return err_temp;
+void outputFile(char *fileName){
+    FILE *fp_tmp = fopen(fileName,"r");
+    if(fp_tmp == NULL)
+        return;
+    char input_line[__MAX_SHELL_LINE_SIZE];
+    while(fgets(input_line,__MAX_SHELL_LINE_SIZE,fp_tmp) != NULL){
+        if(strcmp(input_line,"\n"))
+        printf("%s",input_line);
     }
-    char chr = 1;sz = 0;int i =0;
-    chr = getchar();
-    while(chr != '\n' && chr != EOF){
-        buff[i++] = chr,sz++;
-        if(i == maxSz+1){
-            while(chr != '\n' && chr != EOF){
-                chr = fgetc(inp_file);
-            }
-            err_temp.error_code = __ERR_CODES_BIG_SIZE_INPUT;
-            return err_temp;
-        }
-        buff[i] = 0;
-        chr = fgetc(inp_file);
-    }
-    err_temp.error_code = __ERR_CODES_SUCCESS;
-    return err_temp;
 }
 size_t clearSpaces(char *str,int sz){
     int i = 0,main_pntr = 0;
@@ -144,19 +146,32 @@ void error_msg(error err){
         fputs("very big input size",stderr);break;
     case __ERR_CODES_INVALID_FILE:
         fputs("file can't be opened (opened by another program or invalid path)",stderr);break;
+    case __ERR_CODES_WRONG_NUM_PARAMS:
+        fputs("Wrong number of parameters please enter right number of parameters",stderr);break;
+    case __ERR_CODES_HISTORY_FILE_OPEN:
+        fputs("cannot open history file",stderr);break;
+    case __ERR_CODES_NOSUCHDIR:
+        fputs("no such directory",stderr);break;
     default: fputs("error happened",stderr);break;
     }
 }
 
 error execute(char * str , size_t sz){
-    char * token = strtok(str , " ");
+    char * token = strtok(str , " \n");
     char *params[__MAX_NUM_PARAMS_SIZE];
-    int indx = 2;
-    params[0] = __SHELL;params[1] = "-c";
+    int indx = 0;//2;
+//    params[0] = __SHELL;//params[1] = "-c";
     params[indx] = token;
     while(token != NULL){
-        token = strtok(NULL , " ");
-        params[++indx];
+        token = strtok(NULL , " \n");
+        params[++indx] = token;
+    }
+    if(!strcmp(params[0] ,"exit")){
+        terminate();
+    }else if (!strcmp(params[0] , "cd")){
+        return executeCD(params);
+    }else if(!strcmp (params[0] , "history")){
+        return executeHistory(params);
     }
     if(str[sz-1] == '&'){
         return executeBack(params);
@@ -172,15 +187,12 @@ error executeFore(char *str[]){
     pid = fork ();
     if (pid == 0)
     {
-      /* This is the child process.  Execute the shell command. */
-      status = execv (str[0] , str);
+       execvp (str[0] , str);
       _exit (EXIT_FAILURE);
     }
     else if (pid < 0)
-        /* The fork failed.  Report failure.  */
         status = -1;
     else
-        /* This is the parent process.  Wait for the child to complete.  */
         if (waitpid (pid, &status, 0) != pid)
             status = -1;
     if(status == -1)
@@ -190,5 +202,49 @@ error executeFore(char *str[]){
 }
 error executeBack(char *str[]){
     error err_tmp = {__ERR_CODES_SUCCESS};
+    return err_tmp;
+}
+error executeHistory(char *str[]){
+    error err_tmp = {__ERR_CODES_SUCCESS};
+    if(str[1] != NULL){
+        err_tmp.error_code = __ERR_CODES_WRONG_NUM_PARAMS;
+    }else
+        outputFile(__HISTORY_FILE_PATH);
+    return err_tmp;
+}
+error executeCD(char *str[]){
+    error err_tmp = {__ERR_CODES_SUCCESS};
+     if(str[2] != NULL){
+        if(str[1] == NULL){ chdir("/home/");char* tmp_direc[200];
+        getwd(tmp_direc);puts(tmp_direc);return err_tmp;}
+        else
+            err_tmp.error_code = __ERR_CODES_WRONG_NUM_PARAMS;
+    }else{
+        char* tmp_direc[200];
+        getwd(tmp_direc);
+        strcat(tmp_direc,"/");
+        strcat(tmp_direc,str[1]);
+        err_tmp = chckdir(tmp_direc);
+        if(err_tmp.error_code == __ERR_CODES_SUCCESS)
+            chdir(str[1]);
+            getwd(tmp_direc);
+            puts(tmp_direc);
+        }
+    return err_tmp;
+}
+error chckdir(char * dir){
+    error err_tmp = {__ERR_CODES_SUCCESS};
+    struct stat s;
+    int err_num = stat(dir,&s);
+    if(-1 == err_num) {
+            err_tmp.error_code = __ERR_CODES_NOSUCHDIR;
+
+    } else {
+        if(S_ISDIR(s.st_mode)) {
+            //do nothing
+        } else {
+            err_tmp.error_code = __ERR_CODES_NOSUCHDIR;
+        }
+    }
     return err_tmp;
 }
