@@ -23,11 +23,28 @@
 	<sys/types.h>
 	<sys/stat.h>
 	"err_codes.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/stat.h>
+	"err_codes.h"
 
-<<<<<<< HEAD
+1444523350 D
+
 1444522203 /home/mohamed/Desktop/tinyShell/err_codes.h
 
-1444950862 source:/home/mohamed/Desktop/lab1/tinyShell/main.c
+1444952821 source:/home/mohamed/Desktop/lab1/tinyShell/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<signal.h>
+	<unistd.h>
+	<errno.h>
+	<sys/types.h>
+	<sys/stat.h>
+	"err_codes.h"
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -38,40 +55,13 @@
 	<sys/stat.h>
 	"err_codes.h"
 
-1444781366 /home/mohamed/Desktop/lab1/tinyShell/err_codes.h
+1444952821 /home/mohamed/Desktop/lab1/tinyShell/err_codes.h
 
 1444739981 source:/home/mohamed/Desktop/lab1/tinyShell/TODO.c
-=======
+
 1444416341 .h"
 
 1444349268 c:\users\ramadan\google drive\csed3\first term\os\labs\lab1\tinyshell\err_codes.h
->>>>>>> 05377cbe764f912f39c20a752bffc79a199194c9
 
-1444521886 source:/home/mohamed/Desktop/tinyShell/TODO.c
-
-1444523350 source:/home/mohamed/Desktop/tinyShell/main.c
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-	<unistd.h>
-	<sys/types.h>
-	<sys/stat.h>
-	"err_codes.h"
-
-1444522203 /home/mohamed/Desktop/tinyShell/err_codes.h
-
-1444779899 source:/home/mohamed/Desktop/lab1/tinyShell/main.c
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-	<signal.h>
-	<unistd.h>
-	<errno.h>
-	<sys/types.h>
-	<sys/stat.h>
-	"err_codes.h"
-
-1444779277 /home/mohamed/Desktop/lab1/tinyShell/err_codes.h
-
-1444739981 source:/home/mohamed/Desktop/lab1/tinyShell/TODO.c
+1444349268 77cbe764f912f39c20a752bffc79a199194c9
 
