@@ -12,4 +12,4 @@ main: main.c err_codes.h
 	$(CC) main.c -o main.o
 
 clean: 
-	rm *o all
+	rm tinyShell main.o

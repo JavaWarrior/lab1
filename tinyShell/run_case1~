@@ -1,0 +1,336 @@
+mohamed@RamadanPc:~$ #this is a sample run for my program
+mohamed@RamadanPc:~$ cd Desktop/lab1/tinyShell/
+mohamed@RamadanPc:~/Desktop/lab1/tinyShell$ make #this comiles the program
+gcc main.o -o tinyShell
+mohamed@RamadanPc:~/Desktop/lab1/tinyShell$ ./tinyShell #this runs in interactive mode
+----------------- welcome to shell program ---------------------
+shell@mohamed>cd #go home
+/home/mohamed
+shell@mohamed>cd Desktop
+/home/mohamed/Desktop
+shell@mohamed>ls           
+file name with spaces  lab1  lab1-2015-10-10.zip  marble.c  marble.c~  sala7 el batee5a  Welad.Rezk.720p.HD.mkv
+shell@mohamed>rm -r "file name with spaces"
+shell@mohamed>ls
+lab1  lab1-2015-10-10.zip  marble.c  marble.c~	sala7 el batee5a  Welad.Rezk.720p.HD.mkv
+shell@mohamed>mkdir "file name with spaces 2"
+shell@mohamed>cd "file name with spaces 2"
+/home/mohamed/Desktop/file name with spaces 2
+shell@mohamed>touch newFile.txt #makes an empty file
+shell@mohamed>cd ../ #go back
+/home/mohamed/Desktop
+shell@mohamed># no we run the program in batch mode from the program itself
+shell@mohamed>cd lab1/tinyShell #program path
+/home/mohamed/Desktop/lab1/tinyShell
+shell@mohamed>./tinyShell lab1_test.txt  #test file that was put on piazza
+----------------- welcome to shell program ---------------------
+shell@mohamed>ls
+
+bin							 history.txt	 makefile~		     tinyShell.layout
+err_codes.h						 lab1_test.txt	 obj			     TODO.c
+_gitattributes						 lab1_test.txt~  tinyShell		     Untitled 1.odt
+_gitattributes~05377cbe764f912f39c20a752bffc79a199194c9  main.c		 tinyShell.cbp
+_gitignore						 main.o		 tinyShell[Conflict].layout
+_gitignore~05377cbe764f912f39c20a752bffc79a199194c9	 makefile	 tinyShell.depend
+shell@mohamed>ls -al
+
+total 184
+drwxrwxr-x 4 mohamed mohamed  4096 Oct 16 17:31 .
+drwxrwxr-x 4 mohamed mohamed  4096 Oct 16 02:06 ..
+drwxr-xr-x 3 mohamed mohamed  4096 Oct 10 22:34 bin
+-rw-rw-r-- 1 mohamed mohamed   794 Oct 16 02:15 err_codes.h
+-rw-rw-r-- 1 mohamed mohamed   395 Oct 16 02:06 _gitattributes
+-rw-rw-r-- 1 mohamed mohamed   378 Oct 16 02:06 _gitattributes~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed   617 Oct 16 02:06 _gitignore
+-rw-rw-r-- 1 mohamed mohamed   574 Oct 16 02:06 _gitignore~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed    16 Oct 10 23:11 history.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt~
+-rw-rw-r-- 1 mohamed mohamed 12288 Oct 16 01:47 .lab1.txt.swp
+-rw-rw-r-- 1 mohamed mohamed    79 Oct 16 15:17 .~lock.Untitled 1.odt#
+-rw-rw-r-- 1 mohamed mohamed 20725 Oct 16 17:23 main.c
+-rw-rw-r-- 1 mohamed mohamed 19968 Oct 16 17:25 main.o
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile~
+drwxrwxr-x 3 mohamed mohamed  4096 Oct 11 02:40 obj
+-rwxrwxr-x 1 mohamed mohamed 24035 Oct 16 17:31 tinyShell
+-rw-rw-r-- 1 mohamed mohamed  1218 Oct 13 03:36 tinyShell.cbp
+-rw-rw-r-- 1 mohamed mohamed   686 Oct  9 13:53 tinyShell[Conflict].layout
+-rw-rw-r-- 1 mohamed mohamed  1249 Oct 16 17:12 tinyShell.depend
+-rw-rw-r-- 1 mohamed mohamed   686 Oct 16 02:18 tinyShell.layout
+-rw-rw-r-- 1 mohamed mohamed     8 Oct 16 02:15 TODO.c
+-rw-rw-r-- 1 mohamed mohamed 24447 Oct 16 15:17 Untitled 1.odt
+shell@mohamed>ls -a -l
+
+total 184
+drwxrwxr-x 4 mohamed mohamed  4096 Oct 16 17:31 .
+drwxrwxr-x 4 mohamed mohamed  4096 Oct 16 02:06 ..
+drwxr-xr-x 3 mohamed mohamed  4096 Oct 10 22:34 bin
+-rw-rw-r-- 1 mohamed mohamed   794 Oct 16 02:15 err_codes.h
+-rw-rw-r-- 1 mohamed mohamed   395 Oct 16 02:06 _gitattributes
+-rw-rw-r-- 1 mohamed mohamed   378 Oct 16 02:06 _gitattributes~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed   617 Oct 16 02:06 _gitignore
+-rw-rw-r-- 1 mohamed mohamed   574 Oct 16 02:06 _gitignore~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed    16 Oct 10 23:11 history.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt~
+-rw-rw-r-- 1 mohamed mohamed 12288 Oct 16 01:47 .lab1.txt.swp
+-rw-rw-r-- 1 mohamed mohamed    79 Oct 16 15:17 .~lock.Untitled 1.odt#
+-rw-rw-r-- 1 mohamed mohamed 20725 Oct 16 17:23 main.c
+-rw-rw-r-- 1 mohamed mohamed 19968 Oct 16 17:25 main.o
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile~
+drwxrwxr-x 3 mohamed mohamed  4096 Oct 11 02:40 obj
+-rwxrwxr-x 1 mohamed mohamed 24035 Oct 16 17:31 tinyShell
+-rw-rw-r-- 1 mohamed mohamed  1218 Oct 13 03:36 tinyShell.cbp
+-rw-rw-r-- 1 mohamed mohamed   686 Oct  9 13:53 tinyShell[Conflict].layout
+-rw-rw-r-- 1 mohamed mohamed  1249 Oct 16 17:12 tinyShell.depend
+-rw-rw-r-- 1 mohamed mohamed   686 Oct 16 02:18 tinyShell.layout
+-rw-rw-r-- 1 mohamed mohamed     8 Oct 16 02:15 TODO.c
+-rw-rw-r-- 1 mohamed mohamed 24447 Oct 16 15:17 Untitled 1.odt
+shell@mohamed>
+
+shell@mohamed>/bin/ls -l -a
+
+total 184
+drwxrwxr-x 4 mohamed mohamed  4096 Oct 16 17:31 .
+drwxrwxr-x 4 mohamed mohamed  4096 Oct 16 02:06 ..
+drwxr-xr-x 3 mohamed mohamed  4096 Oct 10 22:34 bin
+-rw-rw-r-- 1 mohamed mohamed   794 Oct 16 02:15 err_codes.h
+-rw-rw-r-- 1 mohamed mohamed   395 Oct 16 02:06 _gitattributes
+-rw-rw-r-- 1 mohamed mohamed   378 Oct 16 02:06 _gitattributes~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed   617 Oct 16 02:06 _gitignore
+-rw-rw-r-- 1 mohamed mohamed   574 Oct 16 02:06 _gitignore~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed    16 Oct 10 23:11 history.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt~
+-rw-rw-r-- 1 mohamed mohamed 12288 Oct 16 01:47 .lab1.txt.swp
+-rw-rw-r-- 1 mohamed mohamed    79 Oct 16 15:17 .~lock.Untitled 1.odt#
+-rw-rw-r-- 1 mohamed mohamed 20725 Oct 16 17:23 main.c
+-rw-rw-r-- 1 mohamed mohamed 19968 Oct 16 17:25 main.o
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile~
+drwxrwxr-x 3 mohamed mohamed  4096 Oct 11 02:40 obj
+-rwxrwxr-x 1 mohamed mohamed 24035 Oct 16 17:31 tinyShell
+-rw-rw-r-- 1 mohamed mohamed  1218 Oct 13 03:36 tinyShell.cbp
+-rw-rw-r-- 1 mohamed mohamed   686 Oct  9 13:53 tinyShell[Conflict].layout
+-rw-rw-r-- 1 mohamed mohamed  1249 Oct 16 17:12 tinyShell.depend
+-rw-rw-r-- 1 mohamed mohamed   686 Oct 16 02:18 tinyShell.layout
+-rw-rw-r-- 1 mohamed mohamed     8 Oct 16 02:15 TODO.c
+-rw-rw-r-- 1 mohamed mohamed 24447 Oct 16 15:17 Untitled 1.odt
+shell@mohamed>        /bin/ls     -l 
+
+total 160
+drwxr-xr-x 3 mohamed mohamed  4096 Oct 10 22:34 bin
+-rw-rw-r-- 1 mohamed mohamed   794 Oct 16 02:15 err_codes.h
+-rw-rw-r-- 1 mohamed mohamed   395 Oct 16 02:06 _gitattributes
+-rw-rw-r-- 1 mohamed mohamed   378 Oct 16 02:06 _gitattributes~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed   617 Oct 16 02:06 _gitignore
+-rw-rw-r-- 1 mohamed mohamed   574 Oct 16 02:06 _gitignore~05377cbe764f912f39c20a752bffc79a199194c9
+-rw-rw-r-- 1 mohamed mohamed    16 Oct 10 23:11 history.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt
+-rw-rw-r-- 1 mohamed mohamed   321 Oct 13 01:32 lab1_test.txt~
+-rw-rw-r-- 1 mohamed mohamed 20725 Oct 16 17:23 main.c
+-rw-rw-r-- 1 mohamed mohamed 19968 Oct 16 17:25 main.o
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile
+-rw-rw-r-- 1 mohamed mohamed   216 Oct 16 16:55 makefile~
+drwxrwxr-x 3 mohamed mohamed  4096 Oct 11 02:40 obj
+-rwxrwxr-x 1 mohamed mohamed 24035 Oct 16 17:31 tinyShell
+-rw-rw-r-- 1 mohamed mohamed  1218 Oct 13 03:36 tinyShell.cbp
+-rw-rw-r-- 1 mohamed mohamed   686 Oct  9 13:53 tinyShell[Conflict].layout
+-rw-rw-r-- 1 mohamed mohamed  1249 Oct 16 17:12 tinyShell.depend
+-rw-rw-r-- 1 mohamed mohamed   686 Oct 16 02:18 tinyShell.layout
+-rw-rw-r-- 1 mohamed mohamed     8 Oct 16 02:15 TODO.c
+-rw-rw-r-- 1 mohamed mohamed 24447 Oct 16 15:17 Untitled 1.odt
+shell@mohamed>
+
+shell@mohamed>vim
+
+shell@mohamed>
+
+shell@mohamed>gedit &
+
+shell@mohamed>ps
+
+  PID TTY          TIME CMD
+ 6238 pts/0    00:00:00 bash
+ 6256 pts/0    00:00:00 tinyShell
+ 6267 pts/0    00:00:00 tinyShell
+ 6274 pts/0    00:00:00 gedit
+ 6275 pts/0    00:00:00 ps
+shell@mohamed>bin/ps
+
+couldn't find this command
+shell@mohamed>
+
+shell@mohamed>pwd
+
+/home/mohamed/Desktop/lab1/tinyShell
+shell@mohamed>mkdir cs333
+
+shell@mohamed>touch cs333/lab1.txt
+
+shell@mohamed>cd ~/cs333
+
+no such directory
+shell@mohamed>vi lab1.txt
+
+shell@mohamed>pwd
+
+/home/mohamed/Desktop/lab1/tinyShell
+shell@mohamed>cd ../
+
+/home/mohamed/Desktop/lab1
+shell@mohamed>cd ~
+
+/home/mohamed
+shell@mohamed>
+
+shell@mohamed>wc cs333/lab1.txt
+
+wc: cs333/lab1.txt: No such file or directory
+shell@mohamed>cat cs333/lab1.txt
+
+cat: cs333/lab1.txt: No such file or directory
+shell@mohamed>
+
+shell@mohamed>#this is a comment
+
+shell@mohamed>x=5
+
+5
+shell@mohamed>echo $x
+
+5
+shell@mohamed>y=5
+
+5
+shell@mohamed>z=$((x+y))
+
+$((x+y))
+shell@mohamed>echo z
+
+z
+shell@mohamed>echo "hello world"
+
+hello world
+shell@mohamed>echo              	"hello           world"
+
+	hello           world
+shell@mohamed>history
+
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+ls
+ls -al
+ls -a -l
+/bin/ls -l -a
+        /bin/ls     -l 
+vim
+gedit &
+ps
+bin/ps
+pwd
+mkdir cs333
+touch cs333/lab1.txt
+cd ~/cs333
+vi lab1.txt
+pwd
+cd ../
+cd ~
+wc cs333/lab1.txt
+cat cs333/lab1.txt
+#this is a comment
+x=5
+echo $x
+y=5
+z=$((x+y))
+echo z
+echo "hello world"
+echo              	"hello           world"
+history
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+ls
+ls -al
+ls -a -l
+/bin/ls -l -a
+        /bin/ls     -l 
+vim
+gedit &
+ps
+bin/ps
+pwd
+mkdir cs333
+touch cs333/lab1.txt
+cd ~/cs333
+vi lab1.txt
+pwd
+cd ../
+cd ~
+wc cs333/lab1.txt
+cat cs333/lab1.txt
+#this is a comment
+x=5
+echo $x
+y=5
+z=$((x+y))
+echo z
+echo "hello world"
+echo              	"hello           world"
+history
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+cd asdad
+cd lola 
+cd mola 
+cd /usr
+ls
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+cd /usr
+ls
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+cd ~/asdadasd
+pwd
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+moka 
+ls
+rm -d cs333
+rm -r cs333
+echo "try this" >> tryTHis.txt
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+echo $PATH
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+echo $PATH
+exity
+exity
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+#this is a comment
+x="hi there"
+echo $x
+echo $PATH
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+echo $PATH
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+echo sdfsjfsfkjsfskfsfkjsfjksfsjklfskjlfskjfs:sfsdfsfs
+echo /sadsd/sfssfs:/sdfsf/sdfsdsf:sfsfs/
+echo $PATH
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+echo $PATH
+exit
+ -*-*-*-*-*-*-*-*-*-*-*-*  new session started -*-*-*-*-*-*-*-*-*-*-*-*
+log
+exit
+shell@mohamed>x="by for now folks !"
+by for now folks !
+shell@mohamed>echo $x
+by for now folks !
+shell@mohamed>exit
+
+----------------- program exited ---------------------
+

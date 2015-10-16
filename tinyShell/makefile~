@@ -1,7 +1,7 @@
 #choose whether to compile with gcc or g++
 CC=gcc
 # CC = g++
-CFLAGS = -c -wall
+CFLAGS = -c 
 
 all: tinyShell
 
@@ -12,4 +12,4 @@ main: main.c err_codes.h
 	$(CC) main.c -o main.o
 
 clean: 
-	rm *o all
+	rm tinyShell main.o

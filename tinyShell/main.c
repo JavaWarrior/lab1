@@ -21,6 +21,7 @@
 #define __REALLOC_VEC_SIZE 1 //size added to vector when reallocating
 #define __START_VEC_SIZE 1
 #define __USRNAME_SIZE 100 // user name allocation size
+#define __HOME_PATH_SIZE 20
 // global vars
 typedef struct {
     enum errcodes_type_enum error_code;
@@ -59,7 +60,8 @@ error executeDummy(char * params[]);//takes parameters and executes the command 
 
 error executeCD(char *str[]);// special handling for 'cd' command
 error executeHistory(char *str[]);// special handling for 'history' command
-error chdirHome();//special handling for 'cd' shortcut to home
+error executeLog(char *str[]);// special handling for 'history' command
+error chdirHome(char * str);//special handling for 'cd' shortcut to home
 
 error checkInput(char * str,int sz);//checks input for '"'
 error check_cmnd_is_path(char * params[]);// checks that command is a path itself
@@ -292,6 +294,8 @@ error execute(char * str , size_t sz){
         return executeCD(params);
     }else if(!strcmp (params[0] , "history")){
         return executeHistory(params);
+    }else if(!strcmp (params[0] , "log")){
+        return executeLog(params);
     }else if(isVarDeclaration(params[0]) == __TRUE ){
         return executeDeclaration(params);
     }
@@ -303,7 +307,7 @@ error execute(char * str , size_t sz){
 }
 void modifyParams(char *params[]){
     int indx = 0;
-    char * token ;
+    char * token, *envVar ;
     while(params[indx] != NULL){
         if(params[indx][0] == '$'){
             token = params[indx]+1;
@@ -311,8 +315,10 @@ void modifyParams(char *params[]){
             if( vecInd!= -1){
                 params[indx] = RHS_VEC[vecInd];
             }else{
-                token = getenv(token);
-                if(token != NULL){
+                envVar = getenv(token);
+                if(envVar != NULL){
+                    token = (char*) malloc(strlen(envVar) + 1);
+                    strcpy(token,envVar);//so that when PATH is used later it will not point to the same place here.
                     params[indx] = token;
                 }else
                     params[indx] = "";
@@ -345,6 +351,8 @@ void setParams(char * str , size_t sz , char * params[]){
             continue;
         }else if(str[i] == '\n'){
             continue;
+        }else if(str[i] == '#'){
+            break; // rest of the line is just comments
         }
         newChr[curStrInd++] = str[i];
         newChr[curStrInd] = 0;
@@ -406,27 +414,45 @@ error executeHistory(char *str[]){
         outputFile(__HISTORY_FILE_PATH);
     return err_tmp;
 }
+error executeLog(char *str[]){
+    error err_tmp = {__ERR_CODES_SUCCESS};
+    if(str[1] != NULL){
+        err_tmp.error_code = __ERR_CODES_WRONG_NUM_PARAMS;
+    }else
+        outputFile(__LOG_FILE_PATH);
+    return err_tmp;
+}
 error executeCD(char *str[]){
     error err_tmp = {__ERR_CODES_SUCCESS};
+    char tmp_direc[__WORK_DIREC_SIZE];
+    getcwd(tmp_direc,__WORK_DIREC_SIZE);
      if(str[2] != NULL){
-        if(str[1] == NULL || str[1][0] == '~'){return chdirHome();}
-        else
-            err_tmp.error_code = __ERR_CODES_WRONG_NUM_PARAMS;
+        if(str[1] == NULL || str[1][0] == '~'){return chdirHome(str[1]);}
+        else {err_tmp.error_code = __ERR_CODES_WRONG_NUM_PARAMS;}
     }else if(str[1] == NULL || str[1][0] == '~') {
-        return chdirHome();
+        return chdirHome(str[1]);
     }else if (str[1][0] == '/' ){
-        chdir(str[1]);
-    }else{
-        char tmp_direc[__WORK_DIREC_SIZE];
-        getcwd(tmp_direc,__WORK_DIREC_SIZE);
-        strcat(tmp_direc,"/");
-        strcat(tmp_direc,str[1]);
-        err_tmp = chckdir(tmp_direc);
-        if(err_tmp.error_code == __ERR_CODES_SUCCESS)
-            chdir(str[1]);
+        int chdRet = chdir(str[1]);
+        if(chdRet == -1){
+            err_tmp.error_code = __ERR_CODES_NOSUCHDIR;
+        }else {
             getcwd(tmp_direc,__WORK_DIREC_SIZE);
             puts(tmp_direc);
         }
+    }else{
+        strcat(tmp_direc,"/");
+        strcat(tmp_direc,str[1]);
+        err_tmp = chckdir(tmp_direc);
+        if(err_tmp.error_code == __ERR_CODES_SUCCESS){
+            int chdRet = chdir(str[1]);
+            if(chdRet == -1){
+                err_tmp.error_code = __ERR_CODES_NOSUCHDIR;
+            }else {
+                getcwd(tmp_direc,__WORK_DIREC_SIZE);
+                puts(tmp_direc);
+            }
+        }
+    }
     return err_tmp;
 }
 error executeDeclaration(char * str[]){
@@ -462,16 +488,24 @@ error executeDeclaration(char * str[]){
     return err_tmp;
 
 }
-error chdirHome(){
+error chdirHome(char * str){
     error err_tmp = {__ERR_CODES_SUCCESS};
     //chdir("/home");
-    char  tmpHomePath[20] = "/home/";
+    char  tmpHomePath[__HOME_PATH_SIZE] = "/home/";
     strcat(tmpHomePath,userNameStr);
-    chdir(tmpHomePath);
-    char tmp_direc[__WORK_DIREC_SIZE];
-        getcwd(tmp_direc,__WORK_DIREC_SIZE);
-        puts(tmp_direc);
-        return err_tmp;
+    if(str != NULL)
+        strcat(tmpHomePath,str+1);//removes the '~'
+    err_tmp = chckdir(tmpHomePath);
+    if(err_tmp.error_code == __ERR_CODES_SUCCESS){
+        int chRet = chdir(tmpHomePath);
+        if(chRet == -1){
+            err_tmp.error_code = __ERR_CODES_NOSUCHDIR;
+        }else{
+            getcwd(tmpHomePath,__HOME_PATH_SIZE);
+            puts(tmpHomePath);
+        }
+    }
+    return err_tmp;
 }
 error chckdir(char * dir){
     error err_tmp = {__ERR_CODES_SUCCESS};
