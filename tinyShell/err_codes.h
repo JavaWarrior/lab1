@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 #ifndef ERR_CODES_H_INCLUDED
 #define ERR_CODES_H_INCLUDED
-=======
-#ifndef ERR_CODES_H_INCLUDED
-#define ERR_CODES_H_INCLUDED
->>>>>>> 05377cbe764f912f39c20a752bffc79a199194c9
-
 //errors typdef
 enum errcodes_type_enum {__ERR_CODES_SUCCESS,
 __ERR_CODES_FAIL,
@@ -33,10 +27,5 @@ typedef enum __boolean{__TRUE,__FALSE}boolean;
 #define KMAG  "\x1B[35m"
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
-<<<<<<< HEAD
 
 #endif // ERR_CODES_H_INCLUDED
-=======
-
-#endif // ERR_CODES_H_INCLUDED
->>>>>>> 05377cbe764f912f39c20a752bffc79a199194c9
