@@ -340,7 +340,7 @@ void setParams(char * str , size_t sz , char * params[]){
     int i = 0,flag = 0,curParamInd = 0 , curStrInd = 0;
     char * newChr = malloc(__MAX_SHELL_LINE_SIZE), * allocChar;
     for(i = 0 ; i < sz ; i++){
-        if(str[i] == ' ' && !flag){
+        if((str[i] == ' '||str == '\t') && !flag){
             allocChar = (char *)malloc(curStrInd+1);
             strcpy(allocChar,newChr);
             params[curParamInd++] = allocChar;
