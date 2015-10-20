@@ -35,11 +35,12 @@
 
 1444522203 /home/mohamed/Desktop/tinyShell/err_codes.h
 
-1445009010 source:/home/mohamed/Desktop/lab1/tinyShell/main.c
+1445382103 source:/home/mohamed/Desktop/lab1/tinyShell/main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<signal.h>
+	<time.h>
 	<unistd.h>
 	<errno.h>
 	<sys/types.h>

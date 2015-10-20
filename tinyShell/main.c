@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <time.h>
 //linux specials :D
 #include <unistd.h>
 #include <errno.h>
@@ -38,6 +39,8 @@ int curr_vec_ind=0; //variables vector size
 
 char * pathEnvVar; //the "PATH" environment variable
 char  userNameStr[__USRNAME_SIZE]; // machine username
+
+time_t curTimeVar; //a variable that holds the current time of the system. use after calling refreshTime()
 // functions prototypes
 
 void terminate(); //terminates the program
@@ -83,6 +86,7 @@ void writeStartSession();//write a spearator in both history and log file for ev
 int findLHS(char * str);//searches variable in our variable vector
 void initializeVec();//initializes variable vector
 
+void refreshTime();
 //main
 int main(int argc , char ** argv)
 {
@@ -192,6 +196,7 @@ void dirty_work(char * str){
     error err_cd = {__ERR_CODES_SUCCESS};
     main_input_line_size = strlen(main_input_line);
     fputs(main_input_line,history_file);//put line in the history file
+    fflush(history_file);
     err_cd = checkInput(main_input_line,main_input_line_size);
     if(err_cd.error_code != __ERR_CODES_SUCCESS){
         error_msg(err_cd);
@@ -491,10 +496,17 @@ error executeDeclaration(char * str[]){
 error chdirHome(char * str){
     error err_tmp = {__ERR_CODES_SUCCESS};
     //chdir("/home");
-    char  tmpHomePath[__HOME_PATH_SIZE] = "/home/";
-    strcat(tmpHomePath,userNameStr);
-    if(str != NULL)
+    char  tmpHomePath[__HOME_PATH_SIZE] = "/home/"; // put home in path
+    if(str != NULL){
+        if(str[1] =='/'){ // if ~/.... go to the current user
+            strcat(tmpHomePath,userNameStr);
+        }else{
+            strcat(tmpHomePath,"/"); // put '/' to go to the user after ~ , ex ~mohamed
+        }
         strcat(tmpHomePath,str+1);//removes the '~'
+    }else{
+        strcat(tmpHomePath,userNameStr);
+    }
     err_tmp = chckdir(tmpHomePath);
     if(err_tmp.error_code == __ERR_CODES_SUCCESS){
         int chRet = chdir(tmpHomePath);
@@ -593,7 +605,10 @@ error tryThisPath(char * path , char * params[]){
     return err_tmp;
 }
 void handleProcessTerminated(int sig){
-    fprintf(logFilePntr,"CHILD PROCESS %d TERMINATED \n",sig);
+    refreshTime();
+    fprintf(logFilePntr,ctime(&curTimeVar));
+    fprintf(logFilePntr," :: CHILD PROCESS %d TERMINATED \n",sig,ctime(&curTimeVar));
+    fflush(logFilePntr);
 }
 boolean isVarDeclaration(char * str){
     int i =0;
@@ -606,4 +621,7 @@ boolean isVarDeclaration(char * str){
 }
 void getUserName(){
     getlogin_r(userNameStr, __USRNAME_SIZE);
+}
+void refreshTime(){
+    curTimeVar = time(NULL);
 }
