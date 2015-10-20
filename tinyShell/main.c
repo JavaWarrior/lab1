@@ -348,6 +348,7 @@ void setParams(char * str , size_t sz , char * params[]){
         if((str[i] == ' '||str == '\t') && !flag){
             allocChar = (char *)malloc(curStrInd+1);
             strcpy(allocChar,newChr);
+            free(params[curParamInd]);//free old pointer values;
             params[curParamInd++] = allocChar;
             curStrInd = 0;
             continue;
@@ -366,6 +367,8 @@ void setParams(char * str , size_t sz , char * params[]){
         allocChar = (char *) malloc(curStrInd+1);
         strcpy(allocChar,newChr);
         params[curParamInd++] = allocChar;
+        free(params[curParamInd]);//free old pointer values;
+
     }
     params[curParamInd] = NULL;
 //    free(allocChar);free(newChr);
