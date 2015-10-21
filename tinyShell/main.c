@@ -345,7 +345,7 @@ void setParams(char * str , size_t sz , char * params[]){
     int i = 0,flag = 0,curParamInd = 0 , curStrInd = 0;
     char * newChr = malloc(__MAX_SHELL_LINE_SIZE), * allocChar;
     for(i = 0 ; i < sz ; i++){
-        if((str[i] == ' '||str == '\t') && !flag){
+        if((str[i] == ' '||str[i] == '\t') && !flag){
             allocChar = (char *)malloc(curStrInd+1);
             strcpy(allocChar,newChr);
             free(params[curParamInd]);//free old pointer values;
@@ -610,7 +610,7 @@ error tryThisPath(char * path , char * params[]){
 void handleProcessTerminated(int sig){
     refreshTime();
     fprintf(logFilePntr,ctime(&curTimeVar));
-    fprintf(logFilePntr," :: CHILD PROCESS %d TERMINATED \n",sig,ctime(&curTimeVar));
+    fprintf(logFilePntr," :: CHILD PROCESS %d TERMINATED \n",sig);
     fflush(logFilePntr);
 }
 boolean isVarDeclaration(char * str){
