@@ -220,15 +220,15 @@ size_t clearSpaces(char *str,int sz){
     strcpy(tmp,str);
     for(i = 0 ; i < sz ; i++){
         if(main_pntr > 0){
-            if(tmp[i] == ' '){
-                if(str[main_pntr-1] != ' '){
+            if(tmp[i] == ' ' || tmp[i] =='\t'){
+                if(str[main_pntr-1] != ' ' && str[main_pntr-1] != '\t'){
                     str[main_pntr++] = tmp[i];
                 }
             }else{
                 str[main_pntr++] = tmp[i];
             }
         }else{
-            if(tmp[i] != ' '){
+            if(tmp[i] != ' ' && tmp[i] != '\t'){
                 str[main_pntr++] = tmp[i];
             }
         }
@@ -240,7 +240,7 @@ size_t clearSpaces(char *str,int sz){
         }
         str[main_pntr] = 0;
     }
-    if(main_pntr > 0 && str[main_pntr-1] == ' '){
+    if(main_pntr > 0 && (str[main_pntr-1] == ' '|| str[main_pntr-1] =='\t')){
         str[--main_pntr] = 0;
     }
     free(tmp);
@@ -502,6 +502,8 @@ error chdirHome(char * str){
     char  tmpHomePath[__HOME_PATH_SIZE] = "/home/"; // put home in path
     if(str != NULL){
         if(str[1] =='/'){ // if ~/.... go to the current user
+            strcat(tmpHomePath,userNameStr);
+        }else if (str[1] == 0){
             strcat(tmpHomePath,userNameStr);
         }else{
             strcat(tmpHomePath,"/"); // put '/' to go to the user after ~ , ex ~mohamed
