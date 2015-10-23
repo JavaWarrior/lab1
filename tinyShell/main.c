@@ -458,8 +458,12 @@ error executeDeclaration(char * str[]){
         err_tmp.error_code = __ERR_CODES_WRONG_DECLARATION_SYNTAX;
         return err_tmp;
     }
-    char* LHS = strtok(str[0],"=");
-    char* RHS = strtok(NULL , "=\n");
+    char* TMPLHS = strtok(str[0],"=");
+    char* TMPRHS = strtok(NULL , "=\n");
+    char* LHS = (char *) malloc(strlen(TMPLHS)+1);
+    char* RHS = (char *) malloc(strlen(TMPRHS)+1);
+    strcpy(LHS,TMPLHS);
+    strcpy(RHS,TMPRHS);
     if(strtok(NULL , "=\n") != NULL || LHS == NULL || RHS == NULL){
         err_tmp.error_code = __ERR_CODES_WRONG_DECLARATION_SYNTAX;
         return err_tmp;
