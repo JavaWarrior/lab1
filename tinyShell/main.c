@@ -609,6 +609,7 @@ void handleProcessTerminated(int sig){
     refreshTime();
     fprintf(logFilePntr,ctime(&curTimeVar));
     fprintf(logFilePntr," :: CHILD PROCESS %d TERMINATED \n",sig);
+//    fprintf(logFilePntr," :: CHILD PROCESS %d TERMINATED \n",stdout);
     fflush(logFilePntr);
 }
 boolean isVarDeclaration(char * str){
