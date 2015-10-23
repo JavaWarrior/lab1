@@ -3,7 +3,6 @@ CC=gcc
 # CC = g++
 CFLAGS = -c 
 
-all: tinyShell
 
 tinyShell: main.o
 	$(CC) main.o -o tinyShell

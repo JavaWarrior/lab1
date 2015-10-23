@@ -77,7 +77,7 @@ error executeDeclaration(char * str[]);//executes declaration by saving varaible
 
 void setParams(char * str , size_t sz , char * params[]);//a strtok like function that handle quotation
 void modifyParams(char *params[]);//searches parameters for shell or env. variables and replace them
-
+char * replaceParam(char * str);//replaces variable with its value
 
 void handleAmpersand(char * str[]);// removes '&' from the command
 void handleProcessTerminated(int sig);//log that process was terminated
@@ -312,22 +312,9 @@ error execute(char * str , size_t sz){
 }
 void modifyParams(char *params[]){
     int indx = 0;
-    char * token, *envVar ;
     while(params[indx] != NULL){
         if(params[indx][0] == '$'){
-            token = params[indx]+1;
-            int vecInd = findLHS(token);
-            if( vecInd!= -1){
-                params[indx] = RHS_VEC[vecInd];
-            }else{
-                envVar = getenv(token);
-                if(envVar != NULL){
-                    token = (char*) malloc(strlen(envVar) + 1);
-                    strcpy(token,envVar);//so that when PATH is used later it will not point to the same place here.
-                    params[indx] = token;
-                }else
-                    params[indx] = "";
-            }
+            params[indx] = replaceParam(params[indx] + 1);//ommits $
         }
         indx++;
     }
@@ -348,7 +335,8 @@ void setParams(char * str , size_t sz , char * params[]){
         if((str[i] == ' '||str[i] == '\t') && !flag){
             allocChar = (char *)malloc(curStrInd+1);
             strcpy(allocChar,newChr);
-            free(params[curParamInd]);//free old pointer values;
+            if(params[curParamInd] != NULL && params[curParamInd] != "")
+                free(params[curParamInd]);//free old pointer values;
             params[curParamInd++] = allocChar;
             curStrInd = 0;
             continue;
@@ -366,8 +354,9 @@ void setParams(char * str , size_t sz , char * params[]){
     if(curStrInd > 0){
         allocChar = (char *) malloc(curStrInd+1);
         strcpy(allocChar,newChr);
+        if(params[curParamInd] != NULL && params[curParamInd] != "")
+            free(params[curParamInd]);//free old pointer values;
         params[curParamInd++] = allocChar;
-        free(params[curParamInd]);//free old pointer values;
 
     }
     params[curParamInd] = NULL;
@@ -471,9 +460,12 @@ error executeDeclaration(char * str[]){
     }
     char* LHS = strtok(str[0],"=");
     char* RHS = strtok(NULL , "=\n");
-    if(strtok(NULL , "=\n") != NULL){
+    if(strtok(NULL , "=\n") != NULL || LHS == NULL || RHS == NULL){
         err_tmp.error_code = __ERR_CODES_WRONG_DECLARATION_SYNTAX;
         return err_tmp;
+    }
+    if(RHS[0] == '$'){
+        RHS = replaceParam(RHS+1);
     }
     int tmp_ind = findLHS(LHS);
     if(tmp_ind != -1){
@@ -629,4 +621,19 @@ void getUserName(){
 }
 void refreshTime(){
     curTimeVar = time(NULL);
+}
+char * replaceParam(char * str){
+    char* envVar;
+    int vecInd = findLHS(str);
+    if( vecInd!= -1){
+        str = RHS_VEC[vecInd];
+    }else{
+        envVar = getenv(str);
+        if(envVar != NULL){
+            str = (char*) malloc(strlen(envVar) + 1);
+            strcpy(str,envVar);//so that when PATH is used later it will not point to the same place here.
+        }else
+            str = "";
+    }
+    return str;
 }
